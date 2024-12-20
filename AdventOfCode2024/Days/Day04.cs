@@ -12,16 +12,16 @@ public class Day04
         {
             do
             {
-                if (IsXmas(wordSearch, position, XDirection.None, YDirection.Up)) count++;
-                if (IsXmas(wordSearch, position, XDirection.None, YDirection.Down)) count++;
+                if (IsXmas1(wordSearch, position, XDirection.None, YDirection.Up)) count++;
+                if (IsXmas1(wordSearch, position, XDirection.None, YDirection.Down)) count++;
 
-                if (IsXmas(wordSearch, position, XDirection.Right, YDirection.Up)) count++;
-                if (IsXmas(wordSearch, position, XDirection.Right, YDirection.None)) count++;
-                if (IsXmas(wordSearch, position, XDirection.Right, YDirection.Down)) count++;
+                if (IsXmas1(wordSearch, position, XDirection.Right, YDirection.Up)) count++;
+                if (IsXmas1(wordSearch, position, XDirection.Right, YDirection.None)) count++;
+                if (IsXmas1(wordSearch, position, XDirection.Right, YDirection.Down)) count++;
 
-                if (IsXmas(wordSearch, position, XDirection.Left, YDirection.Up)) count++;
-                if (IsXmas(wordSearch, position, XDirection.Left, YDirection.None)) count++;
-                if (IsXmas(wordSearch, position, XDirection.Left, YDirection.Down)) count++;
+                if (IsXmas1(wordSearch, position, XDirection.Left, YDirection.Up)) count++;
+                if (IsXmas1(wordSearch, position, XDirection.Left, YDirection.None)) count++;
+                if (IsXmas1(wordSearch, position, XDirection.Left, YDirection.Down)) count++;
 
                 position = position with { X = position.X + 1 };
 
@@ -36,7 +36,25 @@ public class Day04
 
     public static int GetAnswer2()
     {
-        return 0;
+        var wordSearch = new WordSearch(GetInput());
+        var position = new Position(0, 0);
+        var count = 0;
+
+        do
+        {
+            do
+            {
+                if (IsXmas2(wordSearch, position)) count++;
+
+                position = position with { X = position.X + 1 };
+
+            } while (position.X < wordSearch.Width);
+
+            position = position with { X = 0, Y = position.Y + 1 };
+
+        } while (position.Y < wordSearch.Height);
+
+        return count;
     }
 
     private static List<string> GetInput()
@@ -46,7 +64,7 @@ public class Day04
             .ToList();
     }
 
-    private static bool IsXmas(WordSearch wordSearch, Position start, XDirection xDirection, YDirection yDirection)
+    private static bool IsXmas1(WordSearch wordSearch, Position start, XDirection xDirection, YDirection yDirection)
     {
         var position1 = start;
         var position2 = position1.Next(xDirection, yDirection);
@@ -57,13 +75,35 @@ public class Day04
             !wordSearch.IsInBounds(position2) ||
             !wordSearch.IsInBounds(position3) ||
             !wordSearch.IsInBounds(position4)) return false;
-            
+
         if (wordSearch.GetLetterAt(position1) != 'X') return false;
         if (wordSearch.GetLetterAt(position2) != 'M') return false;
         if (wordSearch.GetLetterAt(position3) != 'A') return false;
         if (wordSearch.GetLetterAt(position4) != 'S') return false;
 
         return true;
+    }
+
+    private static bool IsXmas2(WordSearch wordSearch, Position start)
+    {
+        if (wordSearch.GetLetterAt(start) != 'A') return false;
+
+        var position1 = start.Next(XDirection.Left, YDirection.Up);
+        var position2 = start.Next(XDirection.Right, YDirection.Up);
+        var position3 = start.Next(XDirection.Left, YDirection.Down);
+        var position4 = start.Next(XDirection.Right, YDirection.Down);
+
+        if (!wordSearch.IsInBounds(position1) ||
+            !wordSearch.IsInBounds(position2) ||
+            !wordSearch.IsInBounds(position3) ||
+            !wordSearch.IsInBounds(position4)) return false;
+
+        var pair1 = new string([wordSearch.GetLetterAt(position1), wordSearch.GetLetterAt(position4)]);
+        var pair2 = new string([wordSearch.GetLetterAt(position2), wordSearch.GetLetterAt(position3)]);
+
+        return
+            pair1.Contains('M') && pair1.Contains('S') &&
+            pair2.Contains('M') && pair2.Contains('S');
     }
 
     private class WordSearch
