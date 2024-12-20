@@ -13,6 +13,13 @@ public class Tests
     public void Day02()
     {
         Assert.That(Days.Day02.GetAnswer1(), Is.EqualTo(559));
-        Assert.That(Days.Day02.GetAnswer2(), Is.EqualTo(0));
+        Assert.That(Days.Day02.GetAnswer2(), Is.EqualTo(601));
+    }
+
+    [Test]
+    public void Day03()
+    {
+        Assert.That(Days.Day03.GetAnswer1(), Is.EqualTo(191183308));
+        Assert.That(Days.Day03.GetAnswer2(), Is.EqualTo(92082041));
     }
 }

@@ -9,21 +9,45 @@ public class Day02
 
     public static int GetAnswer2()
     {
-        return 0;//GetData().Count(IsSafeWithDampner);
+        var count = 0;
+        var data = GetData();
+
+
+        foreach (var levels in data)
+        {
+            if (IsSafe(levels))
+            {
+                count++;
+            }
+            else
+            {
+                for (var i = 0; i < levels.Count; i++)
+                {
+                    var levelsWithOneRemoved = levels.Where((_, index) => index != i).ToList();
+
+                    if (IsSafe(levelsWithOneRemoved))
+                    {
+                        count++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return count;
     }
 
     private static bool IsSafe(List<int> values)
     {
         var position = 0;
         var direction = 0;
-        var previous = values[0];
-        var current = 0;
 
         while (position < values.Count - 1)
         {
             position++;
 
-            current= values[position];
+            var a = values[position-1];
+            var b = values[position];
 
             var diff = Math.Abs(a - b);
 
