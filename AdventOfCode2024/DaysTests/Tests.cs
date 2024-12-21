@@ -29,4 +29,11 @@ public class Tests
         Assert.That(Days.Day04.GetAnswer1(), Is.EqualTo(2434));
         Assert.That(Days.Day04.GetAnswer2(), Is.EqualTo(1835));
     }
+
+    [Test]
+    public void Day05()
+    {
+        Assert.That(Days.Day05.GetAnswer1(), Is.EqualTo(5762));
+        Assert.That(Days.Day05.GetAnswer2(), Is.EqualTo(4130));
+    }
 }
