@@ -1,6 +1,6 @@
 namespace AdventOfCode2024.DaysTests;
 
-public class Tests
+public class Day01To06Tests
 {
     [Test]
     public void Day01()

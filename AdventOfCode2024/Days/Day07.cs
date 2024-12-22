@@ -22,4 +22,19 @@ public class Day07
             .ReadLines()
             .ToList();
     }
+
+    public class MissingOperationsResolver
+    {
+        public bool IsResolvable(int testValue, params int[] numbers)
+        {
+            if (testValue == 0 && numbers.Length == 0) return true;
+
+            if (numbers.Length == 1) return testValue == numbers[0];
+
+            if (testValue == numbers.Sum()) return true;
+
+            if (testValue == numbers.m)
+
+        }
+    }
 }
