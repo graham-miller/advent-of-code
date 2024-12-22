@@ -6,20 +6,18 @@ internal static class Inputs
     {
         var name = $"{typeof(HasNamespace).Namespace}.Resources.Day{day:00}.txt";
 
-        return Assembly.GetAssembly(typeof(Inputs)).GetManifestResourceStream(name);
+        return Assembly.GetAssembly(typeof(Inputs))!.GetManifestResourceStream(name)!;
     }
 
     public static IEnumerable<string> ReadLines(this Stream stream)
     {
         using var reader = new StreamReader(stream);
-        
-        string line;
-        while ((line = reader.ReadLine()) != null)
+
+        while (reader.ReadLine() is { } line)
         {
             yield return line;
         }
 
-        
         stream.Dispose();
     }
 }

@@ -11,7 +11,21 @@ public class Day06
 
     public static int GetAnswer2()
     {
-        return 1;
+        var map = new Map(GetInput());
+        var count = 0;
+
+        for (var x = 0; x < map.Width; x++)
+        for (var y = 0; y < map.Height; y++)
+        {
+            var obstruction = new Position(x, y);
+
+            if (map.AddObstruction(obstruction) && map.CheckForLoop())
+            {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     private static List<string> GetInput()
@@ -24,31 +38,68 @@ public class Day06
     private class Map
     {
         private readonly List<string> _data;
-        private readonly int _width;
-        private readonly int _height;
-        private readonly HashSet<Position> _visitedPositions = [];
         private Position _currentPosition;
-        private Direction _currentDirection = Direction.Up;
+        private Direction _currentDirection;
+        private Position? _addedObstruction;
 
+        public readonly int Width;
+        public readonly int Height;
 
         public Map(List<string> data)
         {
             _data = data;
-            _width = _data[0].Length;
-            _height = _data.Count;
+            Width = _data[0].Length;
+            Height = _data.Count;
             _currentPosition = GetGuardStartingPosition();
-            _visitedPositions.Add(_currentPosition);
         }
 
         public int TrackGuard()
         {
+            ResetGuard();
+            var visitedPositions = new HashSet<Position> { _currentPosition };
+
             while (IsInBounds(_currentPosition))
             {
                 Move();
-                if (IsInBounds(_currentPosition)) _visitedPositions.Add(_currentPosition);
+                if (IsInBounds(_currentPosition)) visitedPositions.Add(_currentPosition);
             }
 
-            return _visitedPositions.Count;
+            return visitedPositions.Count;
+        }
+
+        public bool CheckForLoop()
+        {
+            ResetGuard();
+            var previousMovements = new HashSet<Movement> { new (_currentPosition, _currentDirection) };
+
+            while (IsInBounds(_currentPosition))
+            {
+                Move();
+
+                var currentMovement = new Movement(_currentPosition, _currentDirection);
+
+                if (!previousMovements.Add(currentMovement)) return true;
+            }
+
+            return false;
+        }
+
+        public bool AddObstruction(Position position)
+        {
+            _addedObstruction = null;
+
+            if (HasObstructionAt(position) || position == GetGuardStartingPosition())
+                return false;
+
+            _addedObstruction = position;
+            
+            return true;
+        }
+
+        private void ResetGuard()
+        {
+            _currentPosition = GetGuardStartingPosition();
+            _currentDirection = Direction.Up;
         }
 
         private void Move()
@@ -70,12 +121,14 @@ public class Day06
 
         private bool IsInBounds(Position position)
         {
-            return position.X >= 0 && position.X < _width && position.Y >= 0 && position.Y < _height;
+            return position.X >= 0 && position.X < Width && position.Y >= 0 && position.Y < Height;
         }
 
         private bool HasObstructionAt(Position position)
         {
             if (!IsInBounds(position)) return false;
+
+            if (position == _addedObstruction) return true;
 
             return _data[position.Y][position.X] == '#';
         }
@@ -103,6 +156,8 @@ public class Day06
             };
         }
     }
+
+    private record Movement(Position Position, Direction Direction);
 
     private enum Direction { Up, Down, Left, Right }
 }
