@@ -6,14 +6,14 @@ public class Day07
     {
         var x = GetInput();
 
-        return 0;
+        return 1;
     }
 
     public static int GetAnswer2()
     {
         var x = GetInput();
 
-        return 0;
+        return 1;
     }
 
     private static List<string> GetInput()
