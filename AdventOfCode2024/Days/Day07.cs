@@ -14,26 +14,16 @@ public class Day07
 
     public static long GetAnswer2()
     {
-        var x = GetInput();
+        var result = GetInput()
+            .Select(line => new Equation(line))
+            .Where(MissingOperationsResolver.IsResolvable)
+            .Sum(x => x.Value);
 
-        return 1;
+        return result;
     }
 
     private static List<string> GetInput()
     {
-        //return
-        //[
-        //    "190: 10 19",
-        //    "3267: 81 40 27",
-        //    "83: 17 5",
-        //    "156: 15 6",
-        //    "7290: 6 8 6 15",
-        //    "161011: 16 10 13",
-        //    "192: 17 8 14",
-        //    "21037: 9 7 18 13",
-        //    "292: 11 6 16 20"
-        //];
-
         return Inputs.ForDay(7)
             .ReadLines()
             .ToList();
@@ -80,15 +70,11 @@ public class Day07
             {
                 results.Add(input + operand);
                 results.Add(input * operand);
-                //results.Add(input - operand);
-                //results.Add(input / operand);
             }
             else
             {
                 results.AddRange(Test(input + operand, numbers.Skip(1).ToArray()));
                 results.AddRange(Test(input * operand, numbers.Skip(1).ToArray()));
-                //results.AddRange(Test(input - operand, numbers.Skip(1).ToArray()));
-                //results.AddRange(Test(input / operand, numbers.Skip(1).ToArray()));
             }
 
             return results;
