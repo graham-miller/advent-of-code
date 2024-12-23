@@ -1,6 +1,6 @@
 namespace AdventOfCode2024.DaysTests;
 
-public class Day01To06Tests
+public class PuzzleTests
 {
     [Test]
     public void Day01()
@@ -47,7 +47,7 @@ public class Day01To06Tests
     [Test]
     public void Day07()
     {
-        Assert.That(Days.Day07.GetAnswer1(), Is.EqualTo(0));
+        Assert.That(Days.Day07.GetAnswer1(), Is.EqualTo(2314935962622));
         Assert.That(Days.Day07.GetAnswer2(), Is.EqualTo(0));
     }
 }
