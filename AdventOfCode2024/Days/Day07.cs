@@ -6,7 +6,7 @@ public class Day07
     {
         var result = GetInput()
             .Select(line => new Equation(line))
-            .Where(MissingOperationsResolver.IsResolvable)
+            .Where(equation => MissingOperationsResolver.IsResolvable(equation, false))
             .Sum(x => x.Value);
 
         return result;
@@ -16,7 +16,7 @@ public class Day07
     {
         var result = GetInput()
             .Select(line => new Equation(line))
-            .Where(MissingOperationsResolver.IsResolvable)
+            .Where(equation => MissingOperationsResolver.IsResolvable(equation, true))
             .Sum(x => x.Value);
 
         return result;
@@ -24,6 +24,11 @@ public class Day07
 
     private static List<string> GetInput()
     {
+        //return new List<string>
+        //{
+        //    "7449867267: 120 8 46 73 882 74"
+        //};
+
         return Inputs.ForDay(7)
             .ReadLines()
             .ToList();
@@ -46,21 +51,21 @@ public class Day07
 
     public static class MissingOperationsResolver
     {
-        public static bool IsResolvable(Equation equation)
+        public static bool IsResolvable(Equation equation, bool useConcat)
         {
-            return IsResolvable(equation.Value, equation.Numbers);
+            return IsResolvable(equation.Value, equation.Numbers, useConcat);
         }
 
-        public static bool IsResolvable(long value, long[] numbers)
+        public static bool IsResolvable(long value, long[] numbers, bool useConcat)
         {
             var input = numbers[0];
-            
-            var results = Test(input,  numbers.Skip(1).ToArray());
+
+            var results = Test(input, numbers.Skip(1).ToArray(), useConcat);
 
             return results.Any(r => r == value);
         }
 
-        private static List<long> Test(long input, long[] numbers)
+        private static List<long> Test(long input, long[] numbers, bool useConcat)
         {
             var results = new List<long>();
 
@@ -70,11 +75,15 @@ public class Day07
             {
                 results.Add(input + operand);
                 results.Add(input * operand);
+                
+                if (useConcat) results.Add(long.Parse(input.ToString() + operand));
             }
             else
             {
-                results.AddRange(Test(input + operand, numbers.Skip(1).ToArray()));
-                results.AddRange(Test(input * operand, numbers.Skip(1).ToArray()));
+                results.AddRange(Test(input + operand, numbers.Skip(1).ToArray(), useConcat));
+                results.AddRange(Test(input * operand, numbers.Skip(1).ToArray(), useConcat));
+
+                if (useConcat) results.AddRange(Test(long.Parse(input.ToString() + operand), numbers.Skip(1).ToArray(), useConcat));
             }
 
             return results;

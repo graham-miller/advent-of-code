@@ -48,6 +48,6 @@ public class PuzzleTests
     public void Day07()
     {
         Assert.That(Days.Day07.GetAnswer1(), Is.EqualTo(2314935962622));
-        Assert.That(Days.Day07.GetAnswer2(), Is.EqualTo(0));
+        Assert.That(Days.Day07.GetAnswer2(), Is.EqualTo(401477450831495));
     }
 }

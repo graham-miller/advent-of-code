@@ -12,9 +12,9 @@ internal class MissingOperationsResolverTests
     [TestCase(192, new long[] { 17, 8, 14 }, false)]
     [TestCase(21037, new long[] { 9, 7, 18, 13 }, false)]
     [TestCase(292, new long[] { 11, 6, 16, 20 }, true)]
-    public void ExamplesFromPuzzleReturnAsExpected(int value, long[] numbers, bool expected)
+    public void ExamplesFromPuzzleReturnAsExpected(long value, long[] numbers, bool expected)
     {
-        var actual = Day07.MissingOperationsResolver.IsResolvable(value, numbers);
+        var actual = Day07.MissingOperationsResolver.IsResolvable(value, numbers, false);
 
         Assert.That(actual, Is.EqualTo(expected));
     }
