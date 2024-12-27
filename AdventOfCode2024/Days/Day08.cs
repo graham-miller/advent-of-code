@@ -22,13 +22,6 @@ public class Day08
 
                 var antinode = new Position(antenna1.X + 2 * diffX, antenna1.Y + 2 * diffY);
                 if (map.IsInBounds(antinode)) antinodes.Add(antinode);
-
-                //if (diffX % 3 == 0 && diffY % 3 == 0)
-                //{
-                //    antinode = new Position(antenna1.X + diffX / 3 * 2, antenna1.Y + diffY / 3 * 2);
-                //    if (map.IsInBounds(antinode)) antinodes.Add(antinode);
-                //}
-
             }
         }
 
@@ -37,26 +30,40 @@ public class Day08
 
     public static int GetAnswer2()
     {
-        return 0;
+        var map = new Map(GetInput());
+        var frequencies = map.GetFrequencies();
+        var antinodes = new HashSet<Position>();
+
+        foreach (var frequency in frequencies)
+        {
+            var antennae = map.GetAntennaeWith(frequency);
+
+            foreach (var antenna1 in antennae)
+            foreach (var antenna2 in antennae)
+            {
+                if (antenna1 == antenna2) continue;
+
+                var diffX = -1 * (antenna1.X - antenna2.X);
+                var diffY = -1 * (antenna1.Y - antenna2.Y);
+
+                var multiplier = 1;
+                while (true)
+                {
+                    var antinode = new Position(antenna1.X + multiplier * diffX, antenna1.Y + multiplier * diffY);
+
+                    if (!map.IsInBounds(antinode)) break;
+
+                    antinodes.Add(antinode);
+                    multiplier++;
+                }
+            }
+        }
+
+        return antinodes.Count;
     }
 
     private static List<string> GetInput()
     {
-        //return new List<string>
-        //{
-        //    "..........",
-        //    "..........",
-        //    "..........",
-        //    "....a.....",
-        //    "..........",
-        //    ".....a....",
-        //    "..........",
-        //    "..........",
-        //    "..........",
-        //    ".........."
-        //};
-
-
         return Inputs.ForDay(8)
             .ReadLines()
             .ToList();
